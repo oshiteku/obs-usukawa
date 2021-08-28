@@ -12,6 +12,7 @@ jobs:
     env:
       QT_VERSION: "5.15.2"
       OBS_GIT_TAG: "27.0.1"
+      BUILD_TYPE: "RelWithDebInfo"
     steps:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
@@ -34,7 +35,7 @@ jobs:
           path: |
             ${{ github.workspace }}/deps/obs-deps
             ${{ github.workspace }}/obs-studio
-          key: ${{ runner.os }}-cache-obs-${{ env.OBS_GIT_TAG }}
+          key: ${{ runner.os }}-cache-obs-${{ env.OBS_GIT_TAG }}-${{ env.BUILD_TYPE }}
       - name: Install pre-built obs dependencies
         if: steps.cache-obs-studio.outputs.cache-hit != 'true'
         run: |
@@ -55,8 +56,8 @@ jobs:
           mkdir build
           cd build
           cmake -G "Visual Studio 16 2019" -DDepsPath="${{ github.workspace }}/deps/obs-deps/win64" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
-          cmake --build libobs
-          cmake --build UI/obs-frontend-api
+          cmake --build libobs --config ${{ env.BUILD_TYPE }}
+          cmake --build UI/obs-frontend-api --config ${{ env.BUILD_TYPE }}
       - name: Checkout obs-usukawa
         uses: actions/checkout@v2
         with:
@@ -68,7 +69,7 @@ jobs:
           mkdir build
           cd build
           cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" ..
-          cmake --build .
+          cmake --build . --config ${{ env.BUILD_TYPE }}
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
