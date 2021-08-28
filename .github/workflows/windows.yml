@@ -60,4 +60,12 @@ jobs:
       - name: Checkout obs-usukawa
         uses: actions/checkout@v2
         with:
+          path: ${{ github.workspace }}/obs-usukawa
           submodules: "recursive"
+      - name: Build obs-usukawa
+        working-directory: ${{ github.workspace }}/obs-usukawa
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 16 2019" -DQTDIR=${{ env.Qt5_DIR }} -DLibObs_DIR=${{ github.workspace }}/obs-studio/build/libobs ..
+          cmake --build .
