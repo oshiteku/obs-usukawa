@@ -18,7 +18,14 @@ jobs:
           submodule: true
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v2
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           version: "5.15.2"
