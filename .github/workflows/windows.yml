@@ -46,7 +46,7 @@ jobs:
         id: cache-obs-studio
         uses: actions/cache@v2
         with:
-          path:
+          path: ${{ github.workspace }}/obs-studio
           key: ${{ runner.os }}-OBSCache-${{ env.OBS_GIT_TAG }}
       - name: Build obs-studio
         if: steps.cache-obs-studio.outputs.cache-hit != 'true'
