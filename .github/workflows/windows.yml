@@ -30,10 +30,11 @@ jobs:
         id: cache-qt
         uses: actions/cache@v1
         with:
-          path: ../Qt
+          path: ${{ github.workspace }}/deps/Qt
           key: ${{ runner.os }}-QtCache
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           version: "5.15.2"
+          dir: ${{ github.workspace }}/deps/
