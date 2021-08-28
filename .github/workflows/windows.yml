@@ -1,0 +1,77 @@
+name: Windows Server 2019
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-2019
+    env:
+      QT_VERSION: "5.15.2"
+      OBS_GIT_TAG: "27.0.1"
+      BUILD_TYPE: "RelWithDebInfo"
+    steps:
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/deps/Qt
+          key: ${{ runner.os }}-cache-qt-${{ env.QT_VERSION }}
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          version: ${{ env.QT_VERSION }}
+          dir: ${{ github.workspace }}/deps/
+      - name: Cache obs-studio
+        id: cache-obs-studio
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ github.workspace }}/deps/obs-deps
+            ${{ github.workspace }}/obs-studio
+          key: ${{ runner.os }}-cache-obs-${{ env.OBS_GIT_TAG }}-${{ env.BUILD_TYPE }}
+      - name: Install pre-built obs dependencies
+        if: steps.cache-obs-studio.outputs.cache-hit != 'true'
+        run: |
+          curl -fsLO https://cdn-fastly.obsproject.com/downloads/dependencies2019.zip
+          7z x dependencies2019.zip -o${{ github.workspace }}/deps/obs-deps
+      - name: Checkout obs-studio
+        if: steps.cache-obs-studio.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: obsproject/obs-studio
+          ref: ${{ env.OBS_GIT_TAG }}
+          path: ${{ github.workspace }}/obs-studio
+          submodules: "recursive"
+      - name: Build obs-studio
+        if: steps.cache-obs-studio.outputs.cache-hit != 'true'
+        working-directory: ${{ github.workspace }}/obs-studio
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 16 2019" -DDepsPath="${{ github.workspace }}/deps/obs-deps/win64" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
+          cmake --build libobs --config ${{ env.BUILD_TYPE }}
+          cmake --build UI/obs-frontend-api --config ${{ env.BUILD_TYPE }}
+      - name: Checkout obs-usukawa
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/obs-usukawa
+          submodules: "recursive"
+      - name: Build obs-usukawa
+        working-directory: ${{ github.workspace }}/obs-usukawa
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" ..
+          cmake --build . --config ${{ env.BUILD_TYPE }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: obs-usukawa-windows-x64
+          path: ${{ github.workspace }}/obs-usukawa/build/${{ env.BUILD_TYPE }}
