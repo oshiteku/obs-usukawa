@@ -28,7 +28,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/deps/Qt
           key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}
