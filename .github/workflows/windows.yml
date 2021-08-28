@@ -54,7 +54,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 16 2019" -DDepsPath=${{ github.workspace }}/deps/obs-deps/win64 -DQTDIR=${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64 -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
+          cmake -G "Visual Studio 16 2019" -DDepsPath="${{ github.workspace }}/deps/obs-deps/win64" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
           cmake --build libobs
           cmake --build UI/obs-frontend-api
       - name: Checkout obs-usukawa
@@ -67,5 +67,5 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 16 2019" -DQTDIR=${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64 -DLibObs_DIR=${{ github.workspace }}/obs-studio/build/libobs ..
+          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" ..
           cmake --build .
