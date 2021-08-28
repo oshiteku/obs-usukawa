@@ -39,6 +39,6 @@ jobs:
           version: "5.15.2"
           dir: ${{ github.workspace }}/deps/
       - name: Install pre-built obs dependencies
-        run:
+        run: |
           curl -fsLO https://cdn-fastly.obsproject.com/downloads/dependencies2019.zip
           7z x dependencies2019.zip -o ${{ github.workspace }}/deps/obs-deps
