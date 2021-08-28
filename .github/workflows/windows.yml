@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/deps/Qt
-          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}
+          key: ${{ runner.os }}-cache-qt-${{ env.QT_VERSION }}
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
@@ -34,7 +34,7 @@ jobs:
           path: |
             ${{ github.workspace }}/deps/obs-deps
             ${{ github.workspace }}/obs-studio
-          key: ${{ runner.os }}-ObsCache-${{ env.OBS_GIT_TAG }}
+          key: ${{ runner.os }}-cache-obs-${{ env.OBS_GIT_TAG }}
       - name: Install pre-built obs dependencies
         if: steps.cache-obs-studio.outputs.cache-hit != 'true'
         run: |
