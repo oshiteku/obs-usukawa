@@ -48,3 +48,4 @@ jobs:
           mkdir build
           cd build
           cmake -G "Visual Studio 16 2019" -DDepsPath=${{ github.workspace }}/deps/obs-deps/win64 -DQTDIR=${{ env.Qt5_DIR }} -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
+          cmake --build .
