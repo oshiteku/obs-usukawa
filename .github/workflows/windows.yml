@@ -69,3 +69,8 @@ jobs:
           cd build
           cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" ..
           cmake --build .
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: obs-usukawa-windows-x64
+          path: ${{ github.workspace }}/obs-usukawa/build
