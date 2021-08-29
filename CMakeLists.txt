@@ -6,6 +6,7 @@ set(CMAKE_PREFIX_PATH "${QTDIR}")
 
 find_package(LibObs REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
+find_package(Boost REQUIRED)
 
 add_library(
     obs-usukawa MODULE
@@ -14,6 +15,7 @@ add_library(
 )
 
 include_directories(
+    ${Boost_INCLUDE_DIRS}
 )
 
 target_link_libraries(
