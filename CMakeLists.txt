@@ -12,6 +12,8 @@ add_library(
     obs-usukawa MODULE
     src/plugin.cpp
     src/plugin.hpp
+    src/usukawa-core.cpp
+    src/usukawa-core.hpp
 )
 
 include_directories(
