@@ -11,6 +11,7 @@ std::shared_ptr<UsukawaCore> _usukawa_core;
 
 bool obs_module_load(void) {
     _usukawa_core = std::make_shared<UsukawaCore>();
+    _usukawa_core->start();
 
     blog(LOG_INFO, "usukawa: module loaded");
 
