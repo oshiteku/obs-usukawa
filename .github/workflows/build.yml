@@ -60,7 +60,15 @@ jobs:
           cmake -G "Visual Studio 16 2019" -DDepsPath="${{ github.workspace }}/deps/obs-deps/win64" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DCOPIED_DEPENDENCIES=NO -DCOPY_DEPENDENCIES=YES -DBUILD_BROWSER=OFF ..
           cmake --build libobs --config ${{ env.BUILD_TYPE }}
           cmake --build UI/obs-frontend-api --config ${{ env.BUILD_TYPE }}
+      - name: Cache Boost
+        id: cache-boost
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ github.workspace }}/deps/boost
+          key: ${{ runner.os }}-cache-boost-${{ env.BOOST_VERSION }}
       - name: Install Boost
+        if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
           curl -fsLO ${{ env.BOOST_DOWNLOAD_URL }}
           7z x boost_${{ env.BOOST_VERSION }}.7z -o${{ github.workspace }}/deps/boost
