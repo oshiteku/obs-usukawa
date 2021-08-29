@@ -64,7 +64,7 @@ jobs:
           7z x boost_1_77_0.7z -o${{ github.workspace }}/deps/boost
           cd ${{ github.workspace }}/deps/boost/boost_1_77_0
           ./bootstrap
-          ./b2
+          ./b2 --with-filesystem
       - name: Checkout obs-usukawa
         uses: actions/checkout@v2
         with:
