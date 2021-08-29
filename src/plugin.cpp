@@ -1,7 +1,5 @@
 #include <memory>
-
 #include <obs-module.h>
-
 #include "plugin.hpp"
 #include "usukawa-core.hpp"
 
