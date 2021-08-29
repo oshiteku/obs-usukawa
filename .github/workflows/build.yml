@@ -85,7 +85,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" -DBOOST_ROOT="${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}" ..
+          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" -DBOOST_ROOT="${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}" -DBoost_USE_STATIC_LIBS=ON ..
           cmake --build . --config ${{ env.BUILD_TYPE }}
       - name: Upload artifact
         uses: actions/upload-artifact@v2
