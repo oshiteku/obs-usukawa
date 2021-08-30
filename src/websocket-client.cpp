@@ -12,6 +12,7 @@ WebsocketClient::WebsocketClient() {
     _client.init_asio();
     _client.set_open_handler(bind(&WebsocketClient::on_open, this, ::_1));
     _client.set_close_handler(bind(&WebsocketClient::on_close, this, ::_1));
+    _client.set_fail_handler(bind(&WebsocketClient::on_fail, this, ::_1));
     _client.set_message_handler(bind(&WebsocketClient::on_message, this, ::_1, ::_2));
 }
 
@@ -47,6 +48,12 @@ void WebsocketClient::on_close(connection_hdl hdl) {
     auto con = _client.get_con_from_hdl(hdl);
     auto uri = con->get_uri()->str();
     blog(LOG_INFO, "websocket client disconnected: %s", uri.c_str());
+}
+
+void WebsocketClient::on_fail(connection_hdl hdl) {
+    auto con = _client.get_con_from_hdl(hdl);
+    auto error_reason = con->get_ec().message();
+    blog(LOG_ERROR, "websocket connection failed: %s", error_reason.c_str());
 }
 
 void WebsocketClient::on_message(connection_hdl hdl, message_ptr msg) {

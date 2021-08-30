@@ -21,5 +21,6 @@ class WebsocketClient {
 
         void on_open(connection_hdl);
         void on_close(connection_hdl);
+        void on_fail(connection_hdl);
         void on_message(connection_hdl, message_ptr);
 };
