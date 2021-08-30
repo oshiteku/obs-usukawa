@@ -27,11 +27,13 @@ void WebsocketClient::start() {
     _client.connect(con);
 
     _client_thread = std::thread([&]{
+        blog(LOG_INFO, "websocket thread start");
         try {
             _client.run();
         } catch (websocketpp::exception const &e) {
             blog(LOG_ERROR, "websocket error: %s", e.what());
         }
+        blog(LOG_INFO, "websocket thread exit");
     });
 }
 
