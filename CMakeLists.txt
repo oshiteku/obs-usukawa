@@ -8,7 +8,7 @@ set(CMAKE_PREFIX_PATH "${QTDIR}")
 
 find_package(LibObs REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
-find_package(Boost REQUIRED COMPONENTS filesystem)
+find_package(Boost REQUIRED COMPONENTS filesystem random)
 
 add_library(
     obs-usukawa MODULE
@@ -16,10 +16,13 @@ add_library(
     src/plugin.hpp
     src/usukawa-core.cpp
     src/usukawa-core.hpp
+    src/websocket-client.cpp
+    src/websocket-client.hpp
 )
 
 include_directories(
     ${Boost_INCLUDE_DIRS}
+    ${WEBSOCKETPP_ROOT}
 )
 
 target_link_libraries(
@@ -28,4 +31,5 @@ target_link_libraries(
     Qt5::Core
     Qt5::Widgets
     Boost::filesystem
+    Boost::random
 )
