@@ -16,7 +16,7 @@ bool obs_module_load(void) {
     // _usukawa_core->start();
     _websocket_client->start();
 
-    blog(LOG_INFO, "usukawa: module loaded");
+    blog(LOG_INFO, "[usukawa] plugin module loaded");
 
     return true;
 }
@@ -24,5 +24,5 @@ bool obs_module_load(void) {
 void obs_module_unload() {
     _usukawa_core.reset();
 
-    blog(LOG_INFO, "usukawa: module unloaded");
+    blog(LOG_INFO, "[usukawa] plugin module unloaded");
 }

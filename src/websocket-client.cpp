@@ -22,43 +22,43 @@ void WebsocketClient::start() {
     websocketpp::lib::error_code ec;
     client::connection_ptr con = _client.get_connection(uri, ec);
     if (ec) {
-        blog(LOG_ERROR, "could not create websocket connection: %s", ec.message().c_str());
+        blog(LOG_ERROR, "[usukawa] could not create websocket connection: %s", ec.message().c_str());
         return;
     }
     _client.connect(con);
 
     _client_thread = std::thread([&]{
-        blog(LOG_INFO, "websocket thread start");
+        blog(LOG_INFO, "[usukawa] websocket thread start");
         try {
             _client.run();
         } catch (websocketpp::exception const &e) {
-            blog(LOG_ERROR, "websocket error: %s", e.what());
+            blog(LOG_ERROR, "[usukawa] websocket error: %s", e.what());
         }
-        blog(LOG_INFO, "websocket thread exit");
+        blog(LOG_INFO, "[usukawa] websocket thread exit");
     });
 }
 
 void WebsocketClient::on_open(connection_hdl hdl) {
     auto con = _client.get_con_from_hdl(hdl);
     auto uri = con->get_uri()->str();
-    blog(LOG_INFO, "websocket client connected: %s", uri.c_str());
+    blog(LOG_INFO, "[usukawa] websocket client connected: %s", uri.c_str());
 }
 
 void WebsocketClient::on_close(connection_hdl hdl) {
     auto con = _client.get_con_from_hdl(hdl);
     auto uri = con->get_uri()->str();
-    blog(LOG_INFO, "websocket client disconnected: %s", uri.c_str());
+    blog(LOG_INFO, "[usukawa] websocket client disconnected: %s", uri.c_str());
 }
 
 void WebsocketClient::on_fail(connection_hdl hdl) {
     auto con = _client.get_con_from_hdl(hdl);
     auto error_reason = con->get_ec().message();
-    blog(LOG_ERROR, "websocket connection failed: %s", error_reason.c_str());
+    blog(LOG_ERROR, "[usukawa] websocket connection failed: %s", error_reason.c_str());
 }
 
 void WebsocketClient::on_message(connection_hdl hdl, message_ptr msg) {
     auto payload = msg->get_payload();
-    blog(LOG_INFO, "websocket message received: %s", payload.c_str());
+    blog(LOG_INFO, "[usukawa] websocket message received: %s", payload.c_str());
 }
 
 WebsocketClient::~WebsocketClient() {
