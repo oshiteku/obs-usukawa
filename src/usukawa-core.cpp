@@ -17,4 +17,5 @@ void UsukawaCore::start() {
 }
 
 UsukawaCore::~UsukawaCore() {
+    core_proc.terminate();
 }
