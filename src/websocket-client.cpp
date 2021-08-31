@@ -39,6 +39,8 @@ void WebsocketClient::start() {
 }
 
 void WebsocketClient::on_open(connection_hdl hdl) {
+    _hdl = hdl;
+
     auto con = _client.get_con_from_hdl(hdl);
     auto uri = con->get_uri()->str();
     blog(LOG_INFO, "[usukawa] websocket client connected: %s", uri.c_str());
@@ -62,4 +64,13 @@ void WebsocketClient::on_message(connection_hdl hdl, message_ptr msg) {
 }
 
 WebsocketClient::~WebsocketClient() {
+    _client.stop_perpetual();
+
+    websocketpp::lib::error_code ec;
+    _client.close(_hdl, websocketpp::close::status::going_away, "", ec);
+    if (ec) {
+        blog(LOG_ERROR, "[usukawa] websocket error: %s", ec.message().c_str());
+    }
+
+    _client_thread.join();
 }

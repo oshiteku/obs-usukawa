@@ -17,6 +17,7 @@ class WebsocketClient {
 
     private:
         client _client;
+        connection_hdl _hdl;
         std::thread _client_thread;
 
         void on_open(connection_hdl);
