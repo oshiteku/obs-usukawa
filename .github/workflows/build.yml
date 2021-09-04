@@ -14,6 +14,7 @@ jobs:
       OBS_GIT_TAG: "27.0.1"
       BOOST_VERSION: "1_77_0"
       BOOST_DOWNLOAD_URL: "https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.7z"
+      WEBSOCKETPP_GIT_TAG: "0.8.2"
       BUILD_TYPE: "RelWithDebInfo"
     steps:
       - name: Add msbuild to PATH
@@ -75,6 +76,12 @@ jobs:
           cd ${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}
           ./bootstrap
           ./b2 --with-filesystem
+      - name: Checkout WebSocket++
+        uses: actions/checkout@v2
+        with:
+          repository: zaphoyd/websocketpp
+          ref: ${{ env.WEBSOCKETPP_GIT_TAG }}
+          path: ${{ github.workspace }}/deps/websocketpp
       - name: Checkout obs-usukawa
         uses: actions/checkout@v2
         with:
@@ -85,7 +92,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" -DBOOST_ROOT="${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}" -DBoost_USE_STATIC_LIBS=ON ..
+          cmake -G "Visual Studio 16 2019" -DQTDIR="${{ github.workspace }}/deps/Qt/${{ env.QT_VERSION }}/msvc2019_64" -DLibObs_DIR="${{ github.workspace }}/obs-studio/build/libobs" -DBOOST_ROOT="${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}" -DBoost_USE_STATIC_LIBS=ON -DWEBSOCKETPP_ROOT="${{ github.workspace }}/deps/websocketpp" ..
           cmake --build . --config ${{ env.BUILD_TYPE }}
       - name: Upload artifact
         uses: actions/upload-artifact@v2
