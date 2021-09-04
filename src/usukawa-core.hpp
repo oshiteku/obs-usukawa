@@ -11,5 +11,7 @@ class UsukawaCore {
         void start(std::function<void(void)>);
 
     private:
+        bp::ipstream core_output_stream;
+        std::thread core_output_reader;
         bp::child core_proc;
 };
