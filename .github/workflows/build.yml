@@ -67,7 +67,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/deps/boost
-          key: ${{ runner.os }}-cache-boost-${{ env.BOOST_VERSION }}
+          key: ${{ runner.os }}-cache-boost-${{ env.BOOST_VERSION }}-with-filesystem-random
       - name: Install Boost
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
@@ -75,7 +75,7 @@ jobs:
           7z x boost_${{ env.BOOST_VERSION }}.7z -o${{ github.workspace }}/deps/boost
           cd ${{ github.workspace }}/deps/boost/boost_${{ env.BOOST_VERSION }}
           ./bootstrap
-          ./b2 --with-filesystem
+          ./b2 --with-filesystem --with-random
       - name: Checkout WebSocket++
         uses: actions/checkout@v2
         with:
