@@ -13,8 +13,11 @@ bool obs_module_load(void) {
     _usukawa_core = std::make_shared<UsukawaCore>();
     _websocket_client = std::make_shared<WebsocketClient>();
 
-    // _usukawa_core->start();
-    _websocket_client->start();
+    _usukawa_core->start(
+        []{
+            _websocket_client->start();
+        }
+    );
 
     blog(LOG_INFO, "[usukawa] plugin module loaded");
 

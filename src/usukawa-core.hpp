@@ -8,7 +8,7 @@ class UsukawaCore {
     public:
         UsukawaCore();
         ~UsukawaCore();
-        void start();
+        void start(std::function<void(void)>);
 
     private:
         bp::child core_proc;
