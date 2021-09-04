@@ -26,6 +26,7 @@ bool obs_module_load(void) {
 
 void obs_module_unload() {
     _usukawa_core.reset();
+    _websocket_client.reset();
 
     blog(LOG_INFO, "[usukawa] plugin module unloaded");
 }
