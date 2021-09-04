@@ -18,6 +18,8 @@ add_library(
     src/usukawa-core.hpp
     src/websocket-client.cpp
     src/websocket-client.hpp
+    src/message-handler.cpp
+    src/message-handler.hpp
 )
 
 include_directories(

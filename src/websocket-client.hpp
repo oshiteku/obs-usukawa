@@ -8,14 +8,19 @@ typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
 
 using websocketpp::connection_hdl;
 
+class MessageHandler;
+
 class WebsocketClient {
     public:
-        WebsocketClient();
+        WebsocketClient(MessageHandler &message_handler);
         ~WebsocketClient();
 
         void start();
+        void send(std::string);
 
     private:
+        MessageHandler& message_handler;
+
         client _client;
         connection_hdl _hdl;
         std::thread _client_thread;

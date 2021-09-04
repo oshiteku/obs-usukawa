@@ -1,11 +1,13 @@
 #include <obs.hpp>
 #include "websocket-client.hpp"
+#include "message-handler.hpp"
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
-WebsocketClient::WebsocketClient() {
+WebsocketClient::WebsocketClient(MessageHandler &message_handler)
+    : message_handler(message_handler) {
     _client.set_access_channels(websocketpp::log::alevel::all);
     _client.clear_access_channels(websocketpp::log::alevel::frame_payload);
 
@@ -38,12 +40,22 @@ void WebsocketClient::start() {
     });
 }
 
+void WebsocketClient::send(std::string message) {
+    websocketpp::lib::error_code ec;
+    _client.send(_hdl, message, websocketpp::frame::opcode::text, ec);
+    if (ec) {
+        blog(LOG_ERROR, "[usukawa]  websocket error: %s", ec.message().c_str());
+    }
+}
+
 void WebsocketClient::on_open(connection_hdl hdl) {
     _hdl = hdl;
 
     auto con = _client.get_con_from_hdl(hdl);
     auto uri = con->get_uri()->str();
     blog(LOG_INFO, "[usukawa] websocket client connected: %s", uri.c_str());
+
+    message_handler.on_open(*this);
 }
 
 void WebsocketClient::on_close(connection_hdl hdl) {
@@ -61,6 +73,8 @@ void WebsocketClient::on_fail(connection_hdl hdl) {
 void WebsocketClient::on_message(connection_hdl hdl, message_ptr msg) {
     auto payload = msg->get_payload();
     blog(LOG_INFO, "[usukawa] websocket message received: %s", payload.c_str());
+
+    message_handler.on_message(*this, payload);
 }
 
 WebsocketClient::~WebsocketClient() {
