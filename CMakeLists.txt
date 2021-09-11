@@ -10,21 +10,22 @@ find_package(LibObs REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Boost REQUIRED COMPONENTS filesystem random)
 
+file(GLOB usukawa_src
+    "src/*.cpp"
+    "src/*.hpp"
+    "src/message-handler-components/*.cpp"
+    "src/message-handler-components/*.hpp"
+)
+
 add_library(
     obs-usukawa MODULE
-    src/plugin.cpp
-    src/plugin.hpp
-    src/usukawa-core.cpp
-    src/usukawa-core.hpp
-    src/websocket-client.cpp
-    src/websocket-client.hpp
-    src/message-handler.cpp
-    src/message-handler.hpp
+    ${usukawa_src}
 )
 
 include_directories(
     ${Boost_INCLUDE_DIRS}
     ${WEBSOCKETPP_ROOT}
+    ${JSON_ROOT}
 )
 
 target_link_libraries(
