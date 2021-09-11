@@ -25,6 +25,7 @@ add_library(
 include_directories(
     ${Boost_INCLUDE_DIRS}
     ${WEBSOCKETPP_ROOT}
+    ${JSON_ROOT}
 )
 
 target_link_libraries(
