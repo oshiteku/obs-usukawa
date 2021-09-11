@@ -11,8 +11,10 @@ find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Boost REQUIRED COMPONENTS filesystem random)
 
 file(GLOB usukawa_src
-    "src/**/*.cpp"
-    "src/**/*.hpp"
+    "src/*.cpp"
+    "src/*.hpp"
+    "src/message-handler-components/*.cpp"
+    "src/message-handler-components/*.hpp"
 )
 
 add_library(
