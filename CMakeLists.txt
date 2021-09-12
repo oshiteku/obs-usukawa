@@ -26,11 +26,13 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${WEBSOCKETPP_ROOT}
     ${JSON_ROOT}
+    "${LibObs_DIR}/../../UI/obs-frontend-api"
 )
 
 target_link_libraries(
     obs-usukawa
     libobs
+    ${OBS_FRONTEND_LIB}
     Qt5::Core
     Qt5::Widgets
     Boost::filesystem
