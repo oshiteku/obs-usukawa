@@ -39,6 +39,8 @@ void BrowserSourceMessageHandler::on_message(Message &message) {
 
     auto source = obs_source_create(id.c_str(), name.c_str(), settings, nullptr);
     if (source) {
+        obs_source_set_enabled(source, true);
+
         struct Data {
             obs_source_t *source;
             bool visible;
