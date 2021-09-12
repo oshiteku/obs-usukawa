@@ -10,13 +10,13 @@ BrowserSourceMessageHandler::BrowserSourceMessageHandler() {
 void BrowserSourceMessageHandler::on_message(Message &message) {
     blog(LOG_INFO, "[usukawa] broadcaster/browser-source: %s", message.data.dump().c_str());
 
-    OBSSource scene_source = obs_frontend_get_current_scene();
-    OBSScene scene = obs_scene_from_source(scene_source);
+    auto scene_source = obs_frontend_get_current_scene();
+    auto scene = obs_scene_from_source(scene_source);
 
     std::string id = "browser_source";
     std::string name = "[u]";
 
-    OBSSource source = obs_source_create(id.c_str(), name.c_str(), nullptr, nullptr);
+    auto source = obs_source_create(id.c_str(), name.c_str(), nullptr, nullptr);
     if (source) {
         struct Data {
             obs_source_t *source;
@@ -37,6 +37,9 @@ void BrowserSourceMessageHandler::on_message(Message &message) {
         obs_scene_atomic_update(scene, add_source, &data);
         obs_leave_graphics();
     }
+
+    obs_source_release(scene_source);
+    obs_source_release(source);
 }
 
 BrowserSourceMessageHandler::~BrowserSourceMessageHandler() {
