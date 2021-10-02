@@ -15,7 +15,7 @@ class WebsocketClient {
         WebsocketClient(MessageHandler &message_handler);
         ~WebsocketClient();
 
-        void start();
+        void start(std::string);
         void send(std::string);
 
     private:

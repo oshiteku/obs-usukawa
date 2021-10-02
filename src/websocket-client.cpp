@@ -18,9 +18,7 @@ WebsocketClient::WebsocketClient(MessageHandler &message_handler)
     _client.set_message_handler(bind(&WebsocketClient::on_message, this, ::_1, ::_2));
 }
 
-void WebsocketClient::start() {
-    std::string uri = "ws://localhost:5555";
-
+void WebsocketClient::start(const std::string uri) {
     websocketpp::lib::error_code ec;
     client::connection_ptr con = _client.get_connection(uri, ec);
     if (ec) {
