@@ -8,7 +8,7 @@ class UsukawaCore {
     public:
         UsukawaCore();
         ~UsukawaCore();
-        void start(std::function<void(void)>);
+        void start(std::function<void(std::string)>);
 
     private:
         bp::ipstream core_output_stream;

@@ -17,8 +17,8 @@ bool obs_module_load(void) {
     _websocket_client = std::make_shared<WebsocketClient>(*_message_handler);
 
     _usukawa_core->start(
-        []{
-            _websocket_client->start();
+        [](std::string url){
+            _websocket_client->start(url);
         }
     );
 
